@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0b1020">
+  <title>Luma Studio — редактор изображений</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <div class="brand">
+        <div class="brand-mark" aria-hidden="true"><span>✦</span></div>
+        <div><strong>LUMA <em>STUDIO</em></strong><small>Творческая мастерская изображений</small></div>
+      </div>
+      <div class="top-actions">
+        <span class="local-pill"><i></i> Локальная обработка</span>
+        <button id="undoBtn" class="icon-button" title="Отменить (Ctrl+Z)" aria-label="Отменить">↶</button>
+        <button id="redoBtn" class="icon-button" title="Повторить (Ctrl+Y)" aria-label="Повторить">↷</button>
+        <button id="addBtn" class="button button-secondary"><span>＋</span> Добавить фото</button>
+        <button id="saveBtn" class="button button-primary"><span>↓</span> Экспортировать</button>
+      </div>
+    </header>
+
+    <main class="workspace">
+      <aside class="library panel">
+        <div class="panel-head"><div class="eyebrow">ВАША КОЛЛЕКЦИЯ</div><h2>Библиотека</h2><p id="imageCount">0 изображений</p></div>
+        <label id="dropZone" class="drop-zone" for="fileInput">
+          <span class="drop-icon">＋</span><strong>Добавить изображения</strong>
+          <small>Выберите файлы или перетащите сюда</small>
+          <span class="file-types">PNG · JPG · WEBP · BMP · TIFF</span>
+        </label>
+        <input id="fileInput" type="file" accept="image/png,image/jpeg,image/webp,image/bmp,image/tiff,image/gif" multiple hidden>
+        <div class="list-heading"><span>ОТКРЫТЫЕ ФАЙЛЫ</span><span id="listCount">00</span></div>
+        <div id="imageList" class="image-list"></div>
+        <div class="library-tip"><span>✧</span><p>Каждое изображение сохраняет собственные изменения. Переключайтесь между ними в любой момент.</p></div>
+      </aside>
+
+      <section class="stage panel" aria-label="Предпросмотр изображения">
+        <div class="stage-head"><div><div class="eyebrow">РАБОЧАЯ ОБЛАСТЬ</div><h1 id="stageTitle">Создайте свой кадр</h1></div><div id="stageMeta" class="stage-meta">Готово к работе</div></div>
+        <div id="previewArea" class="preview-area">
+          <div id="emptyState" class="empty-state"><div class="empty-art"><span>✦</span><i></i><b></b></div><div class="eyebrow">ВАШ ХОЛСТ ЖДЁТ</div><h2>История начинается с изображения</h2><p>Добавьте одну или несколько фотографий и начните создавать свой стиль.</p><button id="emptyAddBtn" class="button button-primary">＋ &nbsp; Выбрать фото</button></div>
+          <img id="previewImage" alt="Предпросмотр выбранного изображения" hidden>
+        </div>
+        <div class="stage-footer"><div class="rotate-group"><span>ПОВОРОТ</span><button id="rotateLeftBtn" class="tool-button" title="Повернуть влево">↶ <small>90°</small></button><button id="rotateRightBtn" class="tool-button" title="Повернуть вправо">↷ <small>90°</small></button></div><button id="resetBtn" class="text-button">↩ &nbsp; Вернуть оригинал</button></div>
+      </section>
+
+      <aside class="editor panel">
+        <div class="panel-head"><div class="eyebrow">ИНСТРУМЕНТЫ</div><h2>Редактирование</h2><p>Доведите изображение до идеала</p></div>
+        <div class="editor-scroll">
+          <section class="editor-section"><div class="section-title"><span>01</span><h3>Готовые стили</h3></div><div id="filters" class="filter-grid"></div></section>
+          <section class="editor-section"><div class="section-title"><span>02</span><h3>Свет и цвет</h3></div>
+            <div class="slider-row"><label for="brightness">Яркость</label><output id="brightnessValue">100%</output><input id="brightness" type="range" min="0" max="200" value="100"></div>
+            <div class="slider-row"><label for="contrast">Контраст</label><output id="contrastValue">100%</output><input id="contrast" type="range" min="0" max="200" value="100"></div>
+            <div class="slider-row"><label for="saturation">Насыщенность</label><output id="saturationValue">100%</output><input id="saturation" type="range" min="0" max="200" value="100"></div>
+          </section>
+          <section class="editor-section"><div class="section-title"><span>03</span><h3>Размер кадра</h3></div><div class="dimension-grid"><label>Ширина <div><input id="widthInput" type="number" min="1" max="20000" value="1200"><span>px</span></div></label><label>Высота <div><input id="heightInput" type="number" min="1" max="20000" value="800"><span>px</span></div></label></div><label class="check-row"><input id="ratioLock" type="checkbox" checked><span>Сохранять пропорции</span></label><button id="resizeBtn" class="button button-outline">Применить размер <span>↗</span></button></section>
+          <section class="editor-section export-section"><div class="section-title"><span>04</span><h3>Экспорт</h3></div><div class="export-row"><label for="formatSelect">Формат файла</label><select id="formatSelect"><option value="png">PNG · без потерь</option><option value="jpg">JPEG · фотография</option><option value="webp">WebP · компактный</option><option value="bmp">BMP · классический</option><option value="tiff">TIFF · печать</option></select></div><button id="exportBtn" class="button button-primary full-width">↓ &nbsp; Сохранить результат</button><button id="removeBtn" class="remove-button">Убрать фото из библиотеки</button></section>
+        </div>
+      </aside>
+    </main>
+    <footer class="statusbar"><div><span class="status-dot"></span><strong>ГОТОВО</strong><span class="status-divider">/</span><span id="statusText">Добавьте изображение, чтобы начать</span></div><span class="footer-shortcuts">Ctrl+O · открыть &nbsp;&nbsp; Ctrl+S · сохранить &nbsp;&nbsp; Ctrl+Z · отменить</span></footer>
+  </div>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <script src="/app.js" defer></script>
+</body>
+</html>
